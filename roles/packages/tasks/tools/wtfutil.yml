@@ -1,0 +1,37 @@
+- name: Get latest wtfutil version
+  uri:
+    url: "https://api.github.com/repos/wtfutil/wtf/releases/latest"
+  register: wtfutil_release
+
+- name: Select release for download
+  vars:
+    download_filter: ".*linux.*{{ linux_arch }}.tar.gz$"
+  set_fact:
+    wtfutil_release: "{{ wtfutil_release.json.assets | selectattr('browser_download_url', 'match', download_filter) | first }}"
+
+- name: Show wtfutil release
+  debug:
+    msg: "Will install wtfutil {{ wtfutil_release.name }} updated at {{ wtfutil_release.updated_at }}"
+
+- name: Download wtfutil
+  get_url:
+    url: "{{ wtfutil_release.browser_download_url }}"
+    dest: /tmp/wtfutil.tar.gz
+
+- name: Create wtfutil folder for unziping
+  file:
+    path: /tmp/wtfutil-unarchived
+    state: directory
+
+- name: Unarchive wtfutil
+  unarchive:
+    src: /tmp/wtfutil.tar.gz
+    dest: /tmp/wtfutil-unarchived
+
+- name: Move wtfutil
+  vars:
+    file: "{{ wtfutil_release.name | replace('.tar.gz', '') }}"
+  copy:
+    src: /tmp/wtfutil-unarchived/{{ file }}/wtfutil
+    dest: /usr/local/bin/wtfutil
+    mode: "u+rwx,g+rx,o+rx"

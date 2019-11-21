@@ -1,0 +1,7 @@
+- name: Install npm and NodeJs
+  apt:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - nodejs
+    - npm

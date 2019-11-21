@@ -1,0 +1,108 @@
+- name: Install aptitude using apt
+  apt:
+    name: aptitude
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+  tags: docker
+
+- name: Install required system packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  tags: docker
+  loop:
+    - "apt-transport-https"
+    - "ca-certificates"
+    - "curl"
+    - "software-properties-common"
+    - "python3-pip"
+    - "virtualenv"
+    - "python3-setuptools"
+    - "python3-distutils"
+
+- name: Install basic tools
+  apt:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - "vim"
+    - "deepin-screenshot"
+    - "deepin-screen-recorder"
+    - "curl"
+    - "jq"
+    - "gnome-shell-extensions"
+    - "chrome-gnome-shell" # required even for firefox
+    - "wmctrl"
+
+- name: Install pip packages --user
+  become: no
+  pip:
+    name: "{{ item }}"
+    extra_args: --user
+  loop:
+    - "credstash"
+    - "boto3"
+    - "black"
+    - "flake8"
+
+- import_tasks: dev/git.yml
+  tags: git, dev
+
+- import_tasks: dev/docker.yml
+  tags: docker, dev
+
+- import_tasks: dev/vscodium.yml
+  tags: codium, dev
+
+- import_tasks: dev/mysqlcli.yml
+  tags: mysql, dev, db
+
+- import_tasks: dev/dbeaver.yml
+  tags: dbeaver, binaries, dev, db
+
+- import_tasks: dev/npm.yml
+  tags: npm, binaries, dev
+
+- import_tasks: dev/circleci.yml
+  tags: circleci, binaries, dev
+
+- import_tasks: tools/slack.yml
+  tags: slack, binaries, tools
+
+- import_tasks: tools/zoom.yml
+  tags: zoom, binaries, tools
+
+- import_tasks: dev/terraform.yml
+  tags: terraform, binaries, dev
+
+- import_tasks: dev/kubectl.yml
+  tags: kubernetes, binaries, dev
+
+- import_tasks: dev/aws-iam-authenticator.yml
+  tags: kubernetes, binaries, dev
+
+- import_tasks: dev/shellcheck.yml
+  tags: shellcheck, binaries, dev
+
+- import_tasks: tools/tilda.yml
+  tags: tilda, binaries, tools
+
+- import_tasks: tools/wtfutil.yml
+  tags: wtfutil, binaries, tools
+
+- import_tasks: tools/moodo.yml
+  tags: moodo, binaries, tools
+
+- import_tasks: tools/gtweaks.yml
+  tags: gnome, tweaks, binaries, tools
+
+- name: Install snaps
+  snap:
+    name:
+      - tusk
+      - spotify
+      - postman
+      - gitkraken
+  tags: snap

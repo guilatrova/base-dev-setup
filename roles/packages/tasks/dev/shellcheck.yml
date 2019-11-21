@@ -1,0 +1,29 @@
+# For some reason snap/apt is not updated with latest shellcheck version
+- name: Get latest shellcheck version
+  get_url:
+    url: "https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz"
+    dest: /tmp/shellcheck.tar.xz
+
+- name: Create shellcheck folder for unziping
+  file:
+    path: /tmp/shellcheck-unarchived
+    state: directory
+
+- name: Unzip shellcheck
+  unarchive:
+    src: /tmp/shellcheck.tar.xz
+    dest: /tmp/shellcheck-unarchived
+
+- name: Move shellcheck
+  copy:
+    src: /tmp/shellcheck-unarchived/shellcheck-stable/shellcheck
+    dest: /usr/local/bin/shellcheck
+    mode: "u+rwx,g+rx,o+rx"
+
+- name: Get shellcheck installed version
+  shell: shellcheck --version | grep version | head -1
+  register: shellcheck_version
+
+- name: Display shellcheck version
+  debug:
+    msg: "Installed shellcheck version {{ shellcheck_version.stdout }}"

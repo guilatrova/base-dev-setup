@@ -1,0 +1,17 @@
+- name: Get latest terraform version
+  shell: curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version'
+  register: terraform_version
+
+- name: Show terraform version
+  debug:
+    msg: "Will install terraform version {{ terraform_version.stdout }}"
+
+- name: Download terraform
+  get_url:
+    url: "https://releases.hashicorp.com/terraform/{{ terraform_version.stdout }}/terraform_{{ terraform_version.stdout }}_linux_{{ linux_arch }}.zip"
+    dest: /tmp/terraform.zip
+
+- name: Unzip terraform
+  unarchive:
+    src: /tmp/terraform.zip
+    dest: /usr/local/bin

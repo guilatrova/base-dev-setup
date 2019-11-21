@@ -1,0 +1,15 @@
+- name: Add VSCodium GPG apt Key
+  apt_key:
+    url: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+    state: present
+
+- name: Add VSCodium Repository
+  apt_repository:
+    repo: deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main
+    state: present
+
+- name: Update apt and install VSCodium
+  apt:
+    name: codium
+    state: latest
+    update_cache: yes
