@@ -1,0 +1,18 @@
+- name: Restore setup playbook
+  hosts: localhost
+  connection: local
+  vars_files:
+    - ../vars/backup.yml
+    - ../vars/packages.yml
+    - ../vars/repositories.yml
+  vars_prompt:
+    - name: aws_key
+      prompt: "AWS Access Key"
+
+    - name: aws_secret
+      prompt: "AWS Secret Access Key"
+
+  roles:
+    - { role: packages, become: yes, tags: install }
+    - { role: restore, tags: backup }
+    - { role: repositories, tags: repositories }

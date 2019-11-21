@@ -1,0 +1,7 @@
+- name: Backup setup playbook
+  hosts: localhost
+  connection: local
+  vars_files:
+    - ../vars/backup.yml
+  roles:
+    - { role: backup }
