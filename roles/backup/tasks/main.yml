@@ -1,0 +1,28 @@
+- name: Backup files to S3
+  s3_sync:
+    bucket: "{{ bucket }}"
+    profile: "{{ aws_profile }}"
+    file_root: "{{ item.local }}"
+    key_prefix: "{{ item.remote }}"
+    include: "{{ item.filter | default('*') }}"
+    exclude: "none" # I want to include hidden items and folders, selected "none" as a file that problably will never exist
+  with_items:
+    - "{{ s3_sync_files }}"
+  register: result
+
+- name: Output results
+  debug:
+    var: result
+# TODO: Keybindings Not working as expected, figure out why!
+# - name: Save keybindings
+#   shell: "dconf dump {{ keybindings_dconf_path }} > /tmp/keybindings.dconf"
+#   tags: keybindings
+
+# - name: Backup keybindings to S3
+#   s3_sync:
+#     bucket: "{{ bucket }}"
+#     profile: "{{ aws_profile }}"
+#     key_prefix: "keybindings"
+#     file_root: "/tmp"
+#     include: "keybindings.dconf"
+#   tags: keybindings
