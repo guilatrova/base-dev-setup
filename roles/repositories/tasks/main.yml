@@ -1,0 +1,40 @@
+- name: Create personal destination folders
+  file:
+    path: "{{ personal_repo_dest }}{{ item }}"
+    state: directory
+  loop: "{{ personal_repos }}"
+
+- name: Clone personal repositories
+  git:
+    repo: "git@github.com:{{ personal_org }}/{{ item }}.git"
+    dest: "{{ personal_repo_dest }}{{ item }}"
+  loop: "{{ personal_repos }}"
+
+- name: Create company destination folders
+  file:
+    path: "{{ company_repo_dest }}{{ item }}"
+    state: directory
+  loop: "{{ personal_repos }}"
+
+- name: Clone company repositories
+  git:
+    repo: "git@github.com:{{ company_org }}/{{ item }}.git"
+    dest: "{{ company_repo_dest }}{{ item }}"
+  loop: "{{ company_repos }}"
+
+- name: Set var
+  set_fact:
+    nautilus_bookmarks_file: "{{ home_folder }}.config/gtk-3.0/bookmarks"
+
+- name: Get nautilus bookmarks
+  shell: "cat {{ nautilus_bookmarks_file }}"
+  register: bookmarkscontent
+
+- name: Add missing items to nautilus bookmarks
+  vars:
+    name: "{{ item | regex_replace('^.*(?=/\\w+)', '') | replace('/', '') }}"
+  shell: "echo 'file://{{ item }} {{ name }}' >> {{ nautilus_bookmarks_file }}"
+  when: "{{ bookmarkscontent.stdout.find(item) == -1 }}"
+  loop:
+    - "{{ personal_repo_dest }}"
+    - "{{ company_repo_dest }}"
