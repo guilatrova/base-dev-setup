@@ -1,0 +1,85 @@
+- name: Get list of files from S3
+  aws_s3:
+    bucket: "{{ bucket }}"
+    aws_access_key: "{{ aws_key }}"
+    aws_secret_key: "{{ aws_secret }}"
+    region: "{{ aws_region }}"
+    mode: list
+    prefix: "{{ item.remote }}/"
+    marker: "{{ item.remote }}/"
+  loop: "{{ s3_sync_files }}"
+  register: s3_bucket_items
+
+- name: Merge s3 results into a single list and setup vars
+  set_fact:
+    items_to_restore: "{{ s3_bucket_items.results | map(attribute='s3_keys') | list | flatten }}"
+    temporary_sudo_path: "/tmp/sudoitems"
+
+- name: Map items for downloading
+  vars:
+    folder: "{{ item | regex_replace('/.*$', '') }}"
+    sync_item: "{{ s3_sync_files | selectattr('remote', 'match', '^' + folder) | first }}"
+    dest_path: "{{ sync_item.local }}"
+    dest_prefix: "{{ temporary_sudo_path if sync_item.sudo|default(false) else '' }}"
+  set_fact:
+    item_to_download:
+      {
+        remote_item: "{{ item }}",
+        dest_folder: "{{ dest_prefix + dest_path }}",
+        local_dest: "{{ dest_prefix + dest_path }}/{{ item|basename }}",
+        sudo: "{{ sync_item.sudo|default(false) }}",
+      }
+  loop: "{{ items_to_restore }}"
+  register: items_to_download_results
+
+- name: Convert items_to_download_results to list
+  set_fact:
+    items_to_download: "{{ items_to_download_results.results | map(attribute='ansible_facts.item_to_download') | list }}"
+
+- name: Describe items to be restored
+  debug:
+    msg: "{{ item.remote_item }} is going to be saved as {{ item.local_dest }}"
+  loop: "{{ items_to_download }}"
+
+- name: Create destination folders
+  file:
+    path: "{{ item.dest_folder }}"
+    state: directory
+  loop: "{{ items_to_download }}"
+
+- name: Download files from S3
+  aws_s3:
+    bucket: "{{ bucket }}"
+    aws_access_key: "{{ aws_key }}"
+    aws_secret_key: "{{ aws_secret }}"
+    region: "{{ aws_region }}"
+    mode: get
+    object: "{{ item.remote_item }}"
+    dest: "{{ item.local_dest }}"
+  loop: "{{ items_to_download }}"
+
+- name: Move sudoitems to the correct place
+  become: yes
+  copy:
+    src: "{{ item.local_dest }}"
+    dest: "{{ item.local_dest | regex_replace('^' + temporary_sudo_path, '') }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: "u+rwx,g+rx,o+rx"
+  when: "{{ item.sudo }}"
+  loop: "{{ items_to_download }}"
+# TODO: Keybindings figure out why it's not working
+# - name: Download keybindings
+#   aws_s3:
+#     bucket: "{{ bucket }}"
+#     aws_access_key: "{{ aws_key }}"
+#     aws_secret_key: "{{ aws_secret }}"
+#     region: "{{ aws_region }}"
+#     mode: get
+#     object: "keybindings/keybindings.dconf"
+#     dest: "/tmp/keybindings.dconf"
+#   tags: keybindings
+
+# - name: Load keybindings
+#   shell: "dconf load {{ keybindings_dconf_path }} < /tmp/keybindings.dconf"
+#   tags: keybindings
