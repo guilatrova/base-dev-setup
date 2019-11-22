@@ -5,7 +5,7 @@ An effort to make it easy for any developer to backup, restore, install, update 
 I picked up Ansible to allow me easily:
 - :rocket: executing a playbook;
 - :coffee: getting a cup of coffee; and
-- :notebook: have my computer ready to kick in some great work
+- :computer: have my computer ready to kick in some great work
 
 So far, it was just tested in `Ubuntu 18.04` to `Ubuntu 19.10`.
 
