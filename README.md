@@ -109,3 +109,20 @@ Or maybe you're willing to update only zoom to the latest version. You could sim
 Whether you want to update all dev tools except git and docker?
 
 `ansible-playbook playbooks/restore.yml --tags dev --skip-tags git,docker`
+
+
+## No manual steps at all?
+
+Well, I still have to set up some stuff manually.
+
+Right now, personally, after restoring a new machine I gotta:
+
+- Personalize my dock and favorites
+- Enable night light
+- Set up my multi-monitor settings
+- Set up my keybindings
+- Disable [gnome emoji-picker](https://askubuntu.com/questions/1046418/how-do-i-disable-emoji-input-in-ubuntu-mate-18-04)
+- Trigger my [VSCodium settings sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync)
+- Review permissions of some restored files
+
+Always we should strive for automating everything to get working even faster. Pull Requests are welcome!
