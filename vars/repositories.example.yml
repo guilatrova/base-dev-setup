@@ -1,0 +1,13 @@
+home_folder: "/home/latrova"
+bookmarks_file: "{{ home_folder }}/.config/gtk-3.0/bookmarks"
+
+personal_org: "guilatrova"
+personal_repo_dest: "{{ home_folder }}/personal/"
+personal_repos:
+  - "base-dev-setup"
+
+company_org: "my-company-org"
+company_repo_dest: "{{ home_folder }}/my-company/"
+company_repos:
+  - "my-company-repo"
+  - "my-second-company-repo"

@@ -1,0 +1,6 @@
+user: "my-ubuntu-username"
+linux_arch: "amd64"
+
+# Git config
+email: "my-email@provider.com"
+name: "Guilherme Latrova"

@@ -1,0 +1,20 @@
+user: "my-ubuntu-username"
+home_folder: "/home/{{ user }}"
+
+bucket: "my-s3-bucket-used-for-backups"
+aws_profile: "default"
+aws_region: "us-east-1"
+
+keybindings_dconf_path: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/"
+
+s3_sync_files:
+  - { remote: home, local: "{{ home_folder }}", filter: ".bash_aliases" }
+  - { remote: wtfutil, local: "{{ home_folder }}/.config/wtf" }
+  - {
+      remote: binaries,
+      local: /usr/local/bin,
+      filter: "launch-moodo",
+      sudo: yes,
+    }
+  - { remote: tilda, local: "{{ home_folder }}/.config/tilda" }
+  - { remote: wallpapers, local: "{{ home_folder }}/Pictures/Wallpapers" }
