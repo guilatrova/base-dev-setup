@@ -26,7 +26,7 @@ Finally, execute:
 bin/save-backup
 ```
 
-Done :smile:
+Done
 
 
 ### #2. Restoring your data
@@ -41,9 +41,9 @@ Again, before kicking off, create and adjust the following vars:
 - `vars/repositories.yml` from [example](./vars/repositories.example.yml)
 
 Note that:
-- For `packages` you can easily remove filter tools you might not want at all
+- For `packages` you can easily remove or filter tools you might not want at all
 - For `repositories` I suggest keeping separate folders for your personal and company repositories.
-- Still, for `repositories` I added both folders to your Nautilus bookmarks for quick access :smile:
+- Still, for `repositories` I added both folders to your Nautilus bookmarks for quick access
 
 
 If you're in a new machine, you'll need at least `ansible` and `awscli`. Feel free to run `bin/bootstrap` first.
@@ -54,7 +54,7 @@ Now just running:
 bin/restore-backup
 ```
 
-Will do the job :smile:
+will do the job.
 
 ---
 
