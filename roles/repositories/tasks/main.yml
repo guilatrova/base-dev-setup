@@ -6,7 +6,7 @@
 
 - name: Clone personal repositories
   git:
-    repo: "git@github.com:{{ personal_org }}/{{ item }}.git"
+    repo: "git@{{ personal_git_provider }}.com:{{ personal_org }}/{{ item }}.git"
     dest: "{{ personal_repo_dest }}{{ item }}"
   loop: "{{ personal_repos }}"
 
@@ -18,7 +18,7 @@
 
 - name: Clone company repositories
   git:
-    repo: "git@github.com:{{ company_org }}/{{ item }}.git"
+    repo: "git@{{ company_git_provider }}.com:{{ company_org }}/{{ item }}.git"
     dest: "{{ company_repo_dest }}{{ item }}"
   loop: "{{ company_repos }}"
 
