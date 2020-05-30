@@ -1,17 +1,17 @@
-- name: Set url
+- name: "[aws-iam] Set url"
   set_fact:
     AIA_url: "https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator"
 
-- name: Download aws-iam-authenticator
+- name: "[aws-iam] Download aws-iam-authenticator"
   get_url:
     url: "{{ AIA_url }}"
     dest: /usr/local/bin
     mode: "u+rwx,g+rx,o+rx"
 
-- name: Get aws-iam-authenticator version
+- name: "[aws-iam] Get aws-iam-authenticator version"
   shell: aws-iam-authenticator version
   register: AIA_version
 
-- name: Show aws-iam-authenticator version
+- name: "[aws-iam] Show aws-iam-authenticator version"
   debug:
     msg: "Installed aws-iam-authenticator {{ AIA_version.stdout | from_json }}"
