@@ -1,10 +1,15 @@
 #!/bin/bash
 
-sudo apt-get update -y
-sudo apt install -y python3-pip
-pip3 install --user ansible awscli
+# sudo apt-get update -y
+# sudo apt install -y python3-pip
+# pip3 install --user ansible awscli
 
 PATH_STRING='PATH="$PATH:/usr/local/bin"'
 if ! grep -q "$PATH_STRING" ~/.bashrc; then
-    echo "$PATH_STRING" >> ~/.bashrc
+    echo -e "$PATH_STRING" >> ~/.bashrc
+fi
+
+PATH_STRING='PATH="$PATH:$HOME/.local/bin"'
+if ! grep -q "$PATH_STRING" ~/.bashrc; then
+    echo -e "$PATH_STRING" >> ~/.bashrc
 fi
