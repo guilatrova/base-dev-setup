@@ -13,3 +13,5 @@ PATH_STRING='PATH="$PATH:$HOME/.local/bin"'
 if ! grep -q "$PATH_STRING" ~/.bashrc; then
     echo -e "$PATH_STRING" >> ~/.bashrc
 fi
+
+echo "WARNING: You need to restart your terminal to keep going"
