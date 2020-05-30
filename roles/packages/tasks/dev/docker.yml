@@ -1,24 +1,24 @@
-- name: Add Docker GPG apt Key
+- name: "[docker] Add Docker GPG apt Key"
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
 
-- name: Add Docker Repository
+- name: "[docker] Add Docker Repository"
   apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu bionic stable
     state: present
 
-- name: Update apt and install docker-ce
+- name: "[docker] Update apt and install docker-ce"
   apt:
     update_cache: yes
     name: docker-ce
     state: latest
 
-- name: Install docker-compose
+- name: "[docker] Install docker-compose"
   become: no
   pip:
     name: docker-compose
     extra_args: --user
 
-- name: Get docker-compose to be run as root
+- name: "[docker] Get docker-compose to be run as root"
   shell: "usermod -a -G docker '{{ user }}'"

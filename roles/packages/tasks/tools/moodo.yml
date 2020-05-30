@@ -1,27 +1,27 @@
-- name: Get latest moo.do version
+- name: "[Moodo] Get latest version"
   uri:
     url: "https://api.github.com/repos/MooDoApp/MooDoApp.github.io/releases/latest"
   register: moodo_release
 
-- name: Select release for download
+- name: "[Moodo] Select release for download"
   vars:
     download_filter: ".*{{ linux_arch }}.deb$"
   set_fact:
     moodo_release: "{{ moodo_release.json.assets | selectattr('browser_download_url', 'match', download_filter) | first }}"
 
-- name: Grab url
+- name: "[Moodo] Grab url"
   debug:
     var: moodo_release
 
-- name: Show moo.do release
+- name: "[Moodo] Show release"
   debug:
     msg: "Will install moo.do {{ moodo_release.name }} updated at {{ moodo_release.updated_at }}"
 
-- name: Download moo.do
+- name: "[Moodo] Download"
   get_url:
     url: "{{ moodo_release.browser_download_url }}"
     dest: /tmp/moodo.deb
 
-- name: Install moo.do
+- name: "[Moodo] Install"
   apt:
     deb: /tmp/moodo.deb

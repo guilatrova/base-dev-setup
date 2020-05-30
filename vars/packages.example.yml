@@ -4,3 +4,13 @@ linux_arch: "amd64"
 # Git config
 email: "my-email@provider.com"
 name: "Guilherme Latrova"
+
+pip_user_packages:
+  - "boto3"
+  - "black"
+  - "flake8"
+
+snap_packages:
+  - "spotify"
+  - "postman"
+  - "gitkraken"

@@ -1,8 +1,8 @@
-- name: Download zoom
+- name: "[zoom] Download"
   get_url:
     url: "https://zoom.us/client/latest/zoom_{{ linux_arch }}.deb"
     dest: /tmp/zoom.deb
 
-- name: Install zoom
+- name: "[zoom] Install"
   apt:
     deb: /tmp/zoom.deb

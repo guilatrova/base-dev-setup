@@ -1,4 +1,4 @@
-- name: Install aptitude using apt
+- name: "[Base] Install aptitude using apt"
   apt:
     name: aptitude
     state: latest
@@ -6,7 +6,7 @@
     force_apt_get: yes
   tags: docker
 
-- name: Install required system packages
+- name: "[Base] Install required system packages"
   apt:
     name: "{{ item }}"
     state: latest
@@ -22,33 +22,34 @@
     - "python3-setuptools"
     - "python3-distutils"
 
-- name: Install basic tools
+- name: "[Flatpak] Install required system packages for Flatpak"
   apt:
     name: "{{ item }}"
     state: latest
+    update_cache: yes
+  tags: sequeler, flatpak
   loop:
-    - "vim"
-    - "deepin-screenshot"
-    - "deepin-screen-recorder"
-    - "curl"
-    - "jq"
-    - "gnome-shell-extensions"
-    - "chrome-gnome-shell" # required even for firefox
-    - "wmctrl"
+    - "gnome-software"
+    - "gnome-software-plugin-flatpak"
 
-- name: Install pip packages --user
+- name: "[Base] Install basic tools"
+  apt:
+    name: "{{ item }}"
+    state: latest
+  tags: base
+  loop: "{{ apt_packages }}"
+
+- name: "[pip] Install pip packages --user"
   become: no
   pip:
     name: "{{ item }}"
     extra_args: --user
-  loop:
-    - "credstash"
-    - "boto3"
-    - "black"
-    - "flake8"
+  tags: pip
+  loop: "{{ pip_user_packages }}"
 
 - import_tasks: dev/git.yml
-  tags: git, dev
+  become: no
+  tags: git, dev, lotion
 
 - import_tasks: dev/docker.yml
   tags: docker, dev
@@ -59,11 +60,19 @@
 - import_tasks: dev/mysqlcli.yml
   tags: mysql, dev, db
 
+- import_tasks: tools/lotion.yml
+  become: no
+  tags: lotion, binaries, tools
+
+- import_tasks: dev/sequeler.yml
+  tags: sequeler, dev, db
+
 - import_tasks: dev/dbeaver.yml
   tags: dbeaver, binaries, dev, db
 
-- import_tasks: dev/npm.yml
-  tags: npm, binaries, dev
+- import_tasks: dev/node.yml
+  become: no
+  tags: node, nvm, npm, binaries, dev
 
 - import_tasks: dev/circleci.yml
   tags: circleci, binaries, dev
@@ -73,7 +82,6 @@
 
 - import_tasks: tools/zoom.yml
   tags: zoom, binaries, tools
-
 - import_tasks: dev/terraform.yml
   tags: terraform, binaries, dev
 
@@ -98,11 +106,8 @@
 - import_tasks: tools/gtweaks.yml
   tags: gnome, tweaks, binaries, tools
 
-- name: Install snaps
+- name: "[Snap] Install snaps"
   snap:
-    name:
-      - tusk
-      - spotify
-      - postman
-      - gitkraken
+    name: "{{ item }}"
+  loop: "{{ snap_packages }}"
   tags: snap

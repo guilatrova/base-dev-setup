@@ -1,21 +1,21 @@
-- name: Get latest kubectl version
+- name: "[kubectl] Get latest version"
   uri:
     url: "https://storage.googleapis.com/kubernetes-release/release/stable.txt"
     return_content: yes
   register: kubectl_version
 
-- name: Show kubectl version
+- name: "[kubectl] Show version"
   debug:
     msg: "Will install kubectl version {{ kubectl_version.content }}"
 
-- name: Download kubectl
+- name: "[kubectl] Download"
   vars:
     version: "{{ kubectl_version.content | replace('\n', '') }}"
   get_url:
     url: "https://storage.googleapis.com/kubernetes-release/release/{{ version }}/bin/linux/amd64/kubectl"
     dest: /tmp/kubectl
 
-- name: Move kubectl to path
+- name: "[kubectl] Move to path"
   copy:
     src: /tmp/kubectl
     dest: /usr/local/bin/kubectl

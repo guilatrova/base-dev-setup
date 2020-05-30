@@ -1,16 +1,16 @@
-- name: Get latest slack version
+- name: "[Slack] Get latest version"
   shell: curl -s https://slack.com/intl/en-br/release-notes/linux | grep -oP '(?<=<h2>Slack ).*?(?=</h2>)' | head -1
   register: slack_version
 
-- name: Show slack version
+- name: "[Slack] Show version"
   debug:
     msg: "Will install Slack version {{ slack_version.stdout }}"
 
-- name: Download Slack
+- name: "[Slack] Download"
   get_url:
     url: "https://downloads.slack-edge.com/linux_releases/slack-desktop-{{ slack_version.stdout }}-{{ linux_arch }}.deb"
     dest: /tmp/slack.deb
 
-- name: Install Slack
+- name: "[Slack] Install"
   apt:
     deb: /tmp/slack.deb

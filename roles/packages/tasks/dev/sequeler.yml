@@ -1,0 +1,6 @@
+- name: "[Sequeler] Install"
+  become: no
+  flatpak:
+    name:  https://flathub.org/repo/appstream/com.github.alecaddd.sequeler.flatpakref
+    state: present
+    method: user

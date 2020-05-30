@@ -1,26 +1,21 @@
-- name: Add Git Repository
+- name: "[git] Add Git Repository"
   apt_repository:
     repo: ppa:git-core/ppa
     state: present
 
-- name: Update apt and install git
+- name: "[git] Update apt and install git"
   apt:
     name: git
     state: latest
-
-- name: Install git-crypt
-  apt:
-    name: git-crypt
-    state: latest
-
-- name: Setup email on git config
+    
+- name: "[git] Setup email on git config"
   become: no
   git_config:
     scope: global
     name: user.email
     value: "{{ email }}"
 
-- name: Setup name on git config
+- name: "[git] Setup name on git config"
   become: no
   git_config:
     scope: global

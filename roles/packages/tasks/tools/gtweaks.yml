@@ -1,4 +1,4 @@
-- name: Install Gnome Tweaks
+- name: "[Base] Install Gnome Tweaks"
   apt:
     name: gnome-tweak-tool
     state: latest

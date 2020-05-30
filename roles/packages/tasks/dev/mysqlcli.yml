@@ -1,4 +1,4 @@
-- name: Install MySql cli
+- name: "[mysql] Install"
   apt:
     name: mysql-client
     state: latest

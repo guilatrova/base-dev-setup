@@ -1,0 +1,4 @@
+- name: Git:Install git-crypt
+  apt:
+    name: git-crypt
+    state: latest

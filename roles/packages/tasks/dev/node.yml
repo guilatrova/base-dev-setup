@@ -1,0 +1,24 @@
+- name: "[node] Setup executable file"
+  set_fact:
+    nvm_file: "{{ home_folder }}/.nvm/nvm.sh"
+
+- name: "[node] Install nvm"
+  shell: >
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+  args:
+    creates: "{{ nvm_file }}"
+
+- name: "[node] Install latest"
+  shell: ". {{ nvm_file }} && nvm install node"
+
+- name: "[node] Get node version"
+  shell: "node --version"
+  register: node_version
+
+- name: "[node] Get npm version"
+  shell: "npm --version"
+  register: npm_version
+
+- name: "[node] Display node and npm version"
+  debug:
+    msg: "node: {{ node_version.stdout }} NPM: {{ npm_version.stdout }}"

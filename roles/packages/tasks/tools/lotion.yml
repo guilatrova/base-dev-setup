@@ -1,0 +1,14 @@
+- name: "[Lotion] Setup dest folder"
+  set_fact:
+    lotion_dir: "{{ home_folder }}/lotion"
+
+- name: "[Lotion] Clone lotion"
+  git:
+    repo: "https://github.com/puneetsl/lotion.git"
+    dest: "{{ lotion_dir }}"
+
+- name: "[Lotion] Install"
+  shell: 
+    cmd: "{{ lotion_dir }}/install.sh"
+    chdir: "{{ lotion_dir }}"
+  

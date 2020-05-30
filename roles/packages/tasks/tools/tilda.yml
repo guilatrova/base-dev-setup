@@ -1,4 +1,4 @@
-- name: Install Tilda
+- name: "[Tilda] Install"
   apt:
     name: tilda
     state: latest
