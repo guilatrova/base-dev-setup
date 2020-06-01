@@ -1,8 +1,8 @@
-- name: Download dbeaver
+- name: "[DBeaver] Download dbeaver"
   get_url:
     url: "https://dbeaver.io/files/dbeaver-ce_latest_{{ linux_arch }}.deb"
     dest: /tmp/dbeaver.deb
 
-- name: Install dbeaver
+- name: "[DBeaver] Install dbeaver"
   apt:
     deb: /tmp/dbeaver.deb
