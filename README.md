@@ -110,6 +110,9 @@ Whether you want to update all dev tools except git and docker?
 
 `ansible-playbook playbooks/restore.yml --tags dev --skip-tags git,docker`
 
+**Example**
+
+![Updating kubectl and terraform](img/updating-terraform-kubectl.gif)
 
 ## No manual steps at all?
 
